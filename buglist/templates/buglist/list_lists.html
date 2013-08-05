@@ -1,0 +1,40 @@
+{% extends "buglist/base.html" %}
+
+{% block title %}{{ list_title }} Bug Lists{% endblock %}
+
+{% block content %}
+
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+   <h1>To-do Lists</h1>
+   
+   <p>{{ item_count }} items in {{ list_count }} lists</p>
+
+   	{% regroup list_list by group as section_list %}
+
+    {% for group in section_list %}
+        <h3>{{ group.grouper }}</h3>
+        <ul>
+            {% for item in group.list %}
+   	            <li><a class="buglist" href="{% url buglist-incomplete_tasks item.id item.slug %}">{{ item.name }} </a> ({{ item.incomplete_tasks.count }}/{{ item.item_set.count }})</li>
+            {% endfor %}
+        </ul>
+
+    {% endfor %}
+
+    
+
+    <div class="buglist-break">
+    &nbsp;
+    </div>
+
+    <p><a href="{% url buglist-add_list %}">Create new bug list</a></p>
+	
+{% endblock %}
